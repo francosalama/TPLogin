@@ -18,6 +18,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class Login extends Fragment {
 
@@ -25,6 +26,8 @@ public class Login extends Fragment {
     EditText edNombre;
     EditText edPassword;
     Button btnLogin;
+
+    Usuario user = new Usuario();
 
 
     public Login() {
@@ -93,6 +96,7 @@ public class Login extends Fragment {
             super.onPostExecute(resultado);
             // Estoy en el Main Thread.
             Gson usuario = new Gson();
+            user = usuario.fromJson(resultado,Usuario.class);
         }
     }
 
