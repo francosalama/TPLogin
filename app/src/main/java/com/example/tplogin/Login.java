@@ -28,6 +28,7 @@ public class Login extends Fragment {
     Button btnLogin;
 
     Usuario user = new Usuario();
+    TareaAsincronicaUsuarios miTarea = new TareaAsincronicaUsuarios();
 
 
     public Login() {
@@ -42,10 +43,15 @@ public class Login extends Fragment {
             layoutRoot = inflater.inflate(R.layout.fragment_login, container, false);
             ObtenerReferencias();
         }
+
+        miTarea.execute();
+        SetearListeners();
+
+
         return layoutRoot;
     }
 
-    private class TareaAsincronicaCiudades extends AsyncTask<Void, Void, String> {
+    private class TareaAsincronicaUsuarios extends AsyncTask<Void, Void, String> {
 
 
         @Override
@@ -105,4 +111,17 @@ public class Login extends Fragment {
         edNombre   = (EditText) layoutRoot.findViewById(R.id.edNombre) ;
         edPassword   = (EditText) layoutRoot.findViewById(R.id.edPassword) ;
     }
+
+    private void SetearListeners(){
+        btnLogin.setOnClickListener(btnLogin_Click);
+    }
+
+    View.OnClickListener btnLogin_Click = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if(user.Id != 0){
+                Log.d("login", "logueado");
+            }
+        }
+    };
 }
