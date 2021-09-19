@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.os.Debug;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,7 +45,6 @@ public class Login extends Fragment {
             ObtenerReferencias();
         }
 
-        miTarea.execute();
         SetearListeners();
 
 
@@ -69,7 +69,7 @@ public class Login extends Fragment {
             StringBuilder sbResponse;
 
             try {
-                strAPIUrl = new URL("http://api.polshu.com.ar/api/v1/usuarios/login/" + edNombre + "/" + edPassword);
+                strAPIUrl = new URL("https://api.polshu.com.ar/api/v1/usuarios/login/" + edNombre.getText().toString() + "/" + edPassword.getText().toString());
                 miConexion = (HttpURLConnection) strAPIUrl.openConnection();
                 miConexion.setRequestMethod("GET");
                 if (miConexion.getResponseCode() == 200) {
@@ -102,7 +102,9 @@ public class Login extends Fragment {
             super.onPostExecute(resultado);
             // Estoy en el Main Thread.
             Gson usuario = new Gson();
+            Log.d("usuario", resultado);
             user = usuario.fromJson(resultado,Usuario.class);
+            Log.d("usuario", user.Nombre);
         }
     }
 
@@ -119,8 +121,10 @@ public class Login extends Fragment {
     View.OnClickListener btnLogin_Click = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if(user.Id != 0){
-                Log.d("login", "logueado");
+            miTarea.execute();
+            //Log.d("usuario", user.Nombre);
+            if(user.Nombre == "Franco Nicolas"){
+                Log.d("logueado", "logueado");
             }
         }
     };
