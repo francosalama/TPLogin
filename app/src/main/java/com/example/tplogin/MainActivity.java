@@ -10,6 +10,7 @@ import android.os.Bundle;
 public class MainActivity extends AppCompatActivity {
 
     Login fragmentLogin;
+    InsertarMarca fragmentInsertarMarca;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void CrearFragments(){
         fragmentLogin = new Login();
+        fragmentInsertarMarca = new InsertarMarca();
     }
 
     public void ReemplazarFragment(Fragment fragmento){
@@ -35,5 +37,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void IrAlFragmentLogin(){
         ReemplazarFragment(fragmentLogin);
+    }
+    public void IrAlFragmentInsertarMarca(){
+        ReemplazarFragment(fragmentInsertarMarca);
     }
 }

@@ -104,7 +104,14 @@ public class Login extends Fragment {
             Gson usuario = new Gson();
             Log.d("usuario", resultado);
             user = usuario.fromJson(resultado,Usuario.class);
-            Log.d("usuario", user.Nombre);
+            if(user.Id != 0){
+                Log.d("logueado", "logueado");
+
+                MainActivity actividadContenedora;
+                actividadContenedora = (MainActivity) getActivity();
+                assert actividadContenedora != null;
+                actividadContenedora.IrAlFragmentInsertarMarca();
+            }
         }
     }
 
@@ -122,10 +129,6 @@ public class Login extends Fragment {
         @Override
         public void onClick(View v) {
             miTarea.execute();
-            //Log.d("usuario", user.Nombre);
-            if(user.Nombre == "Franco Nicolas"){
-                Log.d("logueado", "logueado");
-            }
         }
     };
 }
