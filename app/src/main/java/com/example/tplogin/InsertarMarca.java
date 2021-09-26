@@ -1,64 +1,134 @@
 package com.example.tplogin;
 
+import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link InsertarMarca#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.example.tplogin.Utils.OutputStreamHelper;
+import com.google.gson.Gson;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+
+
 public class InsertarMarca extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private View layoutRoot = null;
+    public ArrayList<Marcas> listaMarcas;
+    EditText edMarca;
+    Button btnAgregarMarca;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+
+    TareaAsincronicaInsertarMarcas miTarea = new TareaAsincronicaInsertarMarcas();
+    protected JSONObject jsonParam = new JSONObject();
 
     public InsertarMarca() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment InsertarMarca.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static InsertarMarca newInstance(String param1, String param2) {
-        InsertarMarca fragment = new InsertarMarca();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_insertar_marca, container, false);
+        if(layoutRoot == null){
+            layoutRoot = inflater.inflate(R.layout.fragment_insertar_marca, container, false);
+            ObtenerReferencias();
+        }
+        SetearListeners();
+
+        return layoutRoot;
     }
+
+    private void SetearListeners(){
+        btnAgregarMarca.setOnClickListener(btnAgregarMarca_Click);
+    }
+
+    View.OnClickListener btnAgregarMarca_Click = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            makeJSON();
+            miTarea.execute();
+        }
+    };
+
+    private void ObtenerReferencias(){
+        btnAgregarMarca   = (Button) layoutRoot.findViewById(R.id.btnAgregarMarca) ;
+        edMarca = (EditText) layoutRoot.findViewById(R.id.edMarca);
+    }
+
+    public JSONObject makeJSON() {
+        try {
+            jsonParam.put("Nombre", edMarca.getText().toString());
+        } catch (Exception e) {
+            System.out.println("Error:" + e);
+        }
+        return jsonParam;
+    }
+
+    private class TareaAsincronicaInsertarMarcas extends AsyncTask<Void, Void, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            // Estoy en el Main Thread.
+        }
+
+        @Override
+        protected String doInBackground(Void... parametros) {
+            HttpURLConnection miConexion = null;
+            URL strAPIUrl; // Estoy en el Background Thread.
+            BufferedReader responseReader;
+            String responseLine, strResultado = "";
+            StringBuilder sbResponse;
+
+            try {
+                strAPIUrl = new URL("http://api.polshu.com.ar/api/v1/tablas/marcas/");
+                miConexion = (HttpURLConnection) strAPIUrl.openConnection();
+                miConexion.setRequestMethod("POST");
+                miConexion.setRequestProperty("tokenkey", //aca va el token del usuario);
+                if (jsonParam.length() > 0)
+                    OutputStreamHelper.writeOutPut(miConexion.getOutputStream(), jsonParam);
+                if (miConexion.getResponseCode() == 200) {
+                    responseReader = new BufferedReader(new InputStreamReader(miConexion.getInputStream()));
+                    sbResponse = new StringBuilder();
+                    while ((responseLine = responseReader.readLine()) != null) {
+                        sbResponse.append(responseLine);
+                    }
+                    responseReader.close();
+                    strResultado = sbResponse.toString();
+                } else {
+                    Log.d("resultado", "hay error");
+                }
+            } catch (Exception e) {
+                Log.d("resultado", "errores: " + e.getMessage());
+            } finally {
+                if (miConexion != null) {
+                    miConexion.disconnect();
+                }
+            }
+            Log.d("resultado", strResultado);
+            return strResultado;
+        }
+        @Override protected void onPostExecute(String resultado) {
+            super.onPostExecute(resultado);
+            // Estoy en el Main Thread.
+            Toast.makeText(getActivity(), "Marca Agregada", Toast.LENGTH_LONG).show();
+            }
+        }
 }

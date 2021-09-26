@@ -43,7 +43,7 @@ public class ListadoMarcas extends Fragment {
         return layoutRoot;
     }
 
-    private class TareaAsincronicaMarcas extends AsyncTask<Void, Void, String> {
+/*private class TareaAsincronicaInsertarMarcas extends AsyncTask<Void, Void, String> {
 
         private Context context;
         private void CargarDatos (String resultado){
@@ -104,7 +104,7 @@ public class ListadoMarcas extends Fragment {
             Gson usuario = new Gson();
             //user = usuario.fromJson(resultado,Usuario.class);
         }
-    }
+    }*/
 
     private void ObtenerReferencias(){
 
