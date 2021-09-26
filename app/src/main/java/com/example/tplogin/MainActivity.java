@@ -38,7 +38,8 @@ public class MainActivity extends AppCompatActivity {
     public void IrAlFragmentLogin(){
         ReemplazarFragment(fragmentLogin);
     }
-    public void IrAlFragmentInsertarMarca(){
+    public void IrAlFragmentInsertarMarca(String token){
+        fragmentInsertarMarca.setToken(token);
         ReemplazarFragment(fragmentInsertarMarca);
     }
 }

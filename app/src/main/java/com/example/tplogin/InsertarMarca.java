@@ -34,6 +34,7 @@ public class InsertarMarca extends Fragment {
     public ArrayList<Marcas> listaMarcas;
     EditText edMarca;
     Button btnAgregarMarca;
+    String token = null;
 
 
     TareaAsincronicaInsertarMarcas miTarea = new TareaAsincronicaInsertarMarcas();
@@ -81,6 +82,10 @@ public class InsertarMarca extends Fragment {
         return jsonParam;
     }
 
+    public void setToken(String token) {
+        this.token = token;
+    }
+
     private class TareaAsincronicaInsertarMarcas extends AsyncTask<Void, Void, String> {
 
         @Override
@@ -101,7 +106,7 @@ public class InsertarMarca extends Fragment {
                 strAPIUrl = new URL("http://api.polshu.com.ar/api/v1/tablas/marcas/");
                 miConexion = (HttpURLConnection) strAPIUrl.openConnection();
                 miConexion.setRequestMethod("POST");
-                miConexion.setRequestProperty("tokenkey", //aca va el token del usuario);
+                miConexion.setRequestProperty("tokenkey", token);
                 if (jsonParam.length() > 0)
                     OutputStreamHelper.writeOutPut(miConexion.getOutputStream(), jsonParam);
                 if (miConexion.getResponseCode() == 200) {

@@ -110,7 +110,7 @@ public class Login extends Fragment {
                 MainActivity actividadContenedora;
                 actividadContenedora = (MainActivity) getActivity();
                 assert actividadContenedora != null;
-                actividadContenedora.IrAlFragmentInsertarMarca();
+                actividadContenedora.IrAlFragmentInsertarMarca(user.TokenKey);
             }
         }
     }
