@@ -23,6 +23,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -35,6 +36,8 @@ public class InsertarMarca extends Fragment {
     EditText edMarca;
     Button btnAgregarMarca;
     String token = null;
+    String json;
+
 
 
     TareaAsincronicaInsertarMarcas miTarea = new TareaAsincronicaInsertarMarcas();
@@ -53,6 +56,8 @@ public class InsertarMarca extends Fragment {
         }
         SetearListeners();
 
+        json =  "{ Nombre: " + edMarca.getText().toString() + "}";
+
         return layoutRoot;
     }
 
@@ -63,7 +68,7 @@ public class InsertarMarca extends Fragment {
     View.OnClickListener btnAgregarMarca_Click = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            makeJSON();
+            //makeJSON();
             miTarea.execute();
         }
     };
@@ -107,8 +112,11 @@ public class InsertarMarca extends Fragment {
                 miConexion = (HttpURLConnection) strAPIUrl.openConnection();
                 miConexion.setRequestMethod("POST");
                 miConexion.setRequestProperty("tokenkey", token);
-                if (jsonParam.length() > 0)
-                    OutputStreamHelper.writeOutPut(miConexion.getOutputStream(), jsonParam);
+                if (jsonParam != null) {
+                    OutputStreamWriter writer = new OutputStreamWriter(miConexion.getOutputStream());
+                    writer.write(json);
+                    writer.flush();
+                }
                 if (miConexion.getResponseCode() == 200) {
                     responseReader = new BufferedReader(new InputStreamReader(miConexion.getInputStream()));
                     sbResponse = new StringBuilder();
