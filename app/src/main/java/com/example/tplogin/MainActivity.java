@@ -11,6 +11,8 @@ public class MainActivity extends AppCompatActivity {
 
     Login fragmentLogin;
     InsertarMarca fragmentInsertarMarca;
+    ListadoMarcas fragmentListado;
+    ActualizarMarca fragmentActualizar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
     private void CrearFragments(){
         fragmentLogin = new Login();
         fragmentInsertarMarca = new InsertarMarca();
+        fragmentListado = new ListadoMarcas();
+        fragmentActualizar = new ActualizarMarca();
     }
 
     public void ReemplazarFragment(Fragment fragmento){
@@ -41,5 +45,14 @@ public class MainActivity extends AppCompatActivity {
     public void IrAlFragmentInsertarMarca(String token){
         fragmentInsertarMarca.setToken(token);
         ReemplazarFragment(fragmentInsertarMarca);
+    }
+    public void IrAlFragmentListado(String token){
+        fragmentListado.setToken(token);
+        ReemplazarFragment(fragmentListado);
+    }
+    public void IrAlFragmentActualizar(String token, String Id){
+        fragmentActualizar.setToken(token);
+        fragmentActualizar.setId(Id);
+        ReemplazarFragment(fragmentActualizar);
     }
 }

@@ -10,14 +10,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -25,7 +29,12 @@ import java.util.ArrayList;
 public class ListadoMarcas extends Fragment {
 
     private View layoutRoot = null;
-    public ArrayList<Marcas> listaMarcas;
+    ArrayList<Marca> listaMarcas;
+    ArrayAdapter<Marca> marcasAdapter;
+    ListView lvMarcas;
+    TareaAsincronicaListarMarcas miTarea = new TareaAsincronicaListarMarcas();
+    String token = null;
+    Type fooType = new TypeToken<ArrayList<Marca>>() {}.getType();
 
 
     public ListadoMarcas() {
@@ -39,11 +48,20 @@ public class ListadoMarcas extends Fragment {
         if(layoutRoot == null){
             layoutRoot = inflater.inflate(R.layout.fragment_listado_marcas, container, false);
             ObtenerReferencias();
+            SetearListeners();
         }
+
+        miTarea.execute();
+
+
         return layoutRoot;
     }
 
-    private class TareaAsincronicaUsuarios extends AsyncTask<Void, Void, String> {
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    private class TareaAsincronicaListarMarcas extends AsyncTask<Void, Void, String> {
 
 
         @Override
@@ -65,6 +83,7 @@ public class ListadoMarcas extends Fragment {
                 miConexion = (HttpURLConnection) strAPIUrl.openConnection();
                 miConexion.setRequestProperty("Content-Type", "application/json");
                 miConexion.setRequestProperty("Accept", "application/json");
+                miConexion.setRequestProperty("tokenkey", token);
                 miConexion.setRequestMethod("GET");
                 if (miConexion.getResponseCode() == 200) {
                     // En un BufferedReader leo todo!
@@ -95,10 +114,28 @@ public class ListadoMarcas extends Fragment {
         @Override protected void onPostExecute(String resultado) {
             super.onPostExecute(resultado);
             // Estoy en el Main Thread.
+            Gson marcasJson = new Gson();
+            listaMarcas = marcasJson.fromJson(resultado, fooType);
+            marcasAdapter = new ArrayAdapter<Marca>(getContext(), android.R.layout.simple_list_item_1,  listaMarcas);
+            lvMarcas.setAdapter(marcasAdapter);
         }
     }
 
     private void ObtenerReferencias(){
+        lvMarcas = (ListView) layoutRoot.findViewById(R.id.lvMarcas);
+    }
 
+    private void SetearListeners(){
+        lvMarcas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Marca marcaSeleccionada;
+                marcaSeleccionada = (Marca) lvMarcas.getItemAtPosition(position);
+                MainActivity actividadContenedora;
+                actividadContenedora = (MainActivity) getActivity();
+                //assert actividadContenedora != null;
+                actividadContenedora.IrAlFragmentActualizar(token, marcaSeleccionada.Id);
+            }
+        });
     }
 }

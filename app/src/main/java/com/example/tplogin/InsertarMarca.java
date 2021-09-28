@@ -32,7 +32,7 @@ import java.util.ArrayList;
 public class InsertarMarca extends Fragment {
 
     private View layoutRoot = null;
-    public ArrayList<Marcas> listaMarcas;
+    public ArrayList<Marca> listaMarcas;
     EditText edMarca;
     Button btnAgregarMarca;
     String token = null;
@@ -140,6 +140,10 @@ public class InsertarMarca extends Fragment {
             super.onPostExecute(resultado);
             // Estoy en el Main Thread.
             Toast.makeText(getActivity(), "Marca Agregada", Toast.LENGTH_LONG).show();
+            MainActivity actividadContenedora;
+            actividadContenedora = (MainActivity) getActivity();
+            assert actividadContenedora != null;
+            actividadContenedora.IrAlFragmentListado(token);
             }
         }
 }

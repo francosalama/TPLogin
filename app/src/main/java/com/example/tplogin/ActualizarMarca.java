@@ -27,15 +27,16 @@ import java.util.ArrayList;
 public class ActualizarMarca extends Fragment {
 
     private View layoutRoot = null;
-    public ArrayList<Marcas> listaMarcas;
     EditText edActualizarMarca;
     EditText edId;
     Button btnActualizar;
     Button btnEliminar;
     String token = null;
+    String Id = null;
 
 
     TareaAsincronicaActualizarMarcas tareaActualizar = new TareaAsincronicaActualizarMarcas();
+    TareaAsincronicaEliminarMarcas tareaEliminar = new TareaAsincronicaEliminarMarcas();
     protected JSONObject jsonParam = new JSONObject();
     protected JSONObject jsonEliminar = new JSONObject();
 
@@ -57,14 +58,23 @@ public class ActualizarMarca extends Fragment {
 
     private void SetearListeners(){
         btnActualizar.setOnClickListener(btnActualizarMarca_Click);
+        btnEliminar.setOnClickListener(btnEliminar_Click);
     }
 
     View.OnClickListener btnActualizarMarca_Click = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            makeJSON();
-            makeJSONEliminar();
+            setParamsActualizar("Id",Id);
+            setParamsActualizar("Nombre", edActualizarMarca.getText().toString());
             tareaActualizar.execute();
+        }
+    };
+
+    View.OnClickListener btnEliminar_Click = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            setParamsEliminar("Id", Id);
+            tareaEliminar.execute();
         }
     };
 
@@ -72,30 +82,31 @@ public class ActualizarMarca extends Fragment {
         btnActualizar   = (Button) layoutRoot.findViewById(R.id.btnActualizar);
         btnEliminar   = (Button) layoutRoot.findViewById(R.id.btnEliminar);
         edActualizarMarca = (EditText) layoutRoot.findViewById(R.id.edMarcaActualizar);
-        edId = (EditText) layoutRoot.findViewById(R.id.edId);
     }
 
-    public JSONObject makeJSON() {
+    public void setParamsActualizar(String key, String value) {
         try {
-            jsonParam.put("Id", edId.getText().toString());
-            jsonParam.put("Nombre", edActualizarMarca.getText().toString());
+            jsonParam.put(key, value);
         } catch (Exception e) {
-            System.out.println("Error:" + e);
+            //CustomLog.logException(e);
         }
-        return jsonParam;
     }
 
-    public JSONObject makeJSONEliminar() {
+    public void setParamsEliminar(String key, String value) {
         try {
-            jsonEliminar.put("Id", edId.getText().toString());
+            jsonEliminar.put(key, value);
         } catch (Exception e) {
-            System.out.println("Error:" + e);
+            //CustomLog.logException(e);
         }
-        return jsonEliminar;
     }
+
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public void setId(String Id){
+        this.Id = Id;
     }
 
     private class TareaAsincronicaActualizarMarcas extends AsyncTask<Void, Void, String> {
@@ -115,7 +126,7 @@ public class ActualizarMarca extends Fragment {
             StringBuilder sbResponse;
 
             try {
-                strAPIUrl = new URL("http://api.polshu.com.ar/api/v1/tablas/marcas/");
+                strAPIUrl = new URL("https://api.polshu.com.ar/api/v1/tablas/marcas/");
                 miConexion = (HttpURLConnection) strAPIUrl.openConnection();
                 miConexion.setRequestProperty("Content-Type", "application/json");
                 miConexion.setRequestProperty("Accept", "application/json");
@@ -168,8 +179,10 @@ public class ActualizarMarca extends Fragment {
             StringBuilder sbResponse;
 
             try {
-                strAPIUrl = new URL("http://api.polshu.com.ar/api/v1/tablas/marcas/");
+                strAPIUrl = new URL("https://api.polshu.com.ar/api/v1/tablas/marcas/");
                 miConexion = (HttpURLConnection) strAPIUrl.openConnection();
+                miConexion.setRequestProperty("Content-Type", "application/json");
+                miConexion.setRequestProperty("Accept", "application/json");
                 miConexion.setRequestMethod("DELETE");
                 miConexion.setRequestProperty("tokenkey", token);
                 if (jsonEliminar.length() > 0)
