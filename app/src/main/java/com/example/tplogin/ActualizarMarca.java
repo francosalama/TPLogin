@@ -117,6 +117,8 @@ public class ActualizarMarca extends Fragment {
             try {
                 strAPIUrl = new URL("http://api.polshu.com.ar/api/v1/tablas/marcas/");
                 miConexion = (HttpURLConnection) strAPIUrl.openConnection();
+                miConexion.setRequestProperty("Content-Type", "application/json");
+                miConexion.setRequestProperty("Accept", "application/json");
                 miConexion.setRequestMethod("PUT");
                 miConexion.setRequestProperty("tokenkey", token);
                 if (jsonParam.length() > 0)
