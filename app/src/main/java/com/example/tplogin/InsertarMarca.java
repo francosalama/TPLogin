@@ -56,7 +56,7 @@ public class InsertarMarca extends Fragment {
         }
         SetearListeners();
 
-        json =  "{ \"Nombre\": " + edMarca.getText().toString() + "}";
+        json =  "{ Nombre" + edMarca.getText().toString() + "}";
 
         return layoutRoot;
     }
@@ -110,6 +110,8 @@ public class InsertarMarca extends Fragment {
                 strAPIUrl = new URL("https://api.polshu.com.ar/api/v1/tablas/marcas/");
                 miConexion = (HttpURLConnection) strAPIUrl.openConnection();
                 miConexion.setRequestMethod("POST");
+                miConexion.setRequestProperty("Content-Type", "application/json");
+                miConexion.setRequestProperty("Accept", "application/json");
                 miConexion.setRequestProperty("tokenkey", token);
                 if (jsonParam.length() > 0)
                     OutputStreamHelper.writeOutPut(miConexion.getOutputStream(), jsonParam);

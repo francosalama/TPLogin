@@ -63,6 +63,8 @@ public class ListadoMarcas extends Fragment {
             try {
                 strAPIUrl = new URL("https://api.polshu.com.ar/api/v1/tablas/marcas/");
                 miConexion = (HttpURLConnection) strAPIUrl.openConnection();
+                miConexion.setRequestProperty("Content-Type", "application/json");
+                miConexion.setRequestProperty("Accept", "application/json");
                 miConexion.setRequestMethod("GET");
                 if (miConexion.getResponseCode() == 200) {
                     // En un BufferedReader leo todo!
