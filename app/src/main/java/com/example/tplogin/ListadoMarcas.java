@@ -43,16 +43,8 @@ public class ListadoMarcas extends Fragment {
         return layoutRoot;
     }
 
-/*private class TareaAsincronicaInsertarMarcas extends AsyncTask<Void, Void, String> {
+    private class TareaAsincronicaUsuarios extends AsyncTask<Void, Void, String> {
 
-        private Context context;
-        private void CargarDatos (String resultado){
-            ArrayList<Marcas> datosArrayList;
-            ArrayAdapter<Marcas> adapter;
-
-            Gson marcas = new Gson();
-            //listaMarcas = marcas.fromJson(resultado,miType);
-        }
 
         @Override
         protected void onPreExecute() {
@@ -69,8 +61,8 @@ public class ListadoMarcas extends Fragment {
             StringBuilder sbResponse;
 
             try {
-                //strAPIUrl = new URL("http://api.polshu.com.ar/api/v1/usuarios/login/" + edNombre + "/" + edPassword);
-                //miConexion = (HttpURLConnection) strAPIUrl.openConnection();
+                strAPIUrl = new URL("https://api.polshu.com.ar/api/v1/tablas/marcas/");
+                miConexion = (HttpURLConnection) strAPIUrl.openConnection();
                 miConexion.setRequestMethod("GET");
                 if (miConexion.getResponseCode() == 200) {
                     // En un BufferedReader leo todo!
@@ -101,10 +93,8 @@ public class ListadoMarcas extends Fragment {
         @Override protected void onPostExecute(String resultado) {
             super.onPostExecute(resultado);
             // Estoy en el Main Thread.
-            Gson usuario = new Gson();
-            //user = usuario.fromJson(resultado,Usuario.class);
         }
-    }*/
+    }
 
     private void ObtenerReferencias(){
 

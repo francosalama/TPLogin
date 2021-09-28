@@ -56,7 +56,7 @@ public class InsertarMarca extends Fragment {
         }
         SetearListeners();
 
-        json =  "{ Nombre: " + edMarca.getText().toString() + "}";
+        json =  "{ \"Nombre\": " + edMarca.getText().toString() + "}";
 
         return layoutRoot;
     }
@@ -68,7 +68,7 @@ public class InsertarMarca extends Fragment {
     View.OnClickListener btnAgregarMarca_Click = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            //makeJSON();
+            setParams("Nombre", edMarca.getText().toString());
             miTarea.execute();
         }
     };
@@ -78,13 +78,12 @@ public class InsertarMarca extends Fragment {
         edMarca = (EditText) layoutRoot.findViewById(R.id.edMarca);
     }
 
-    public JSONObject makeJSON() {
+    public void setParams(String key, String value) {
         try {
-            jsonParam.put("Nombre", edMarca.getText().toString());
+            jsonParam.put(key, value);
         } catch (Exception e) {
-            System.out.println("Error:" + e);
+            //CustomLog.logException(e);
         }
-        return jsonParam;
     }
 
     public void setToken(String token) {
@@ -108,15 +107,12 @@ public class InsertarMarca extends Fragment {
             StringBuilder sbResponse;
 
             try {
-                strAPIUrl = new URL("http://api.polshu.com.ar/api/v1/tablas/marcas/");
+                strAPIUrl = new URL("https://api.polshu.com.ar/api/v1/tablas/marcas/");
                 miConexion = (HttpURLConnection) strAPIUrl.openConnection();
                 miConexion.setRequestMethod("POST");
                 miConexion.setRequestProperty("tokenkey", token);
-                if (jsonParam != null) {
-                    OutputStreamWriter writer = new OutputStreamWriter(miConexion.getOutputStream());
-                    writer.write(json);
-                    writer.flush();
-                }
+                if (jsonParam.length() > 0)
+                    OutputStreamHelper.writeOutPut(miConexion.getOutputStream(), jsonParam);
                 if (miConexion.getResponseCode() == 200) {
                     responseReader = new BufferedReader(new InputStreamReader(miConexion.getInputStream()));
                     sbResponse = new StringBuilder();
@@ -135,7 +131,7 @@ public class InsertarMarca extends Fragment {
                     miConexion.disconnect();
                 }
             }
-            Log.d("resultado", strResultado);
+            Log.d("marca", strResultado);
             return strResultado;
         }
         @Override protected void onPostExecute(String resultado) {
