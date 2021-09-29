@@ -1,5 +1,6 @@
 package com.example.tplogin;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresPermission;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -10,6 +11,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import java.util.Locale;
 import java.util.Set;
@@ -164,5 +167,24 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.clear();
         editor.apply();
+    }
+
+    @Override public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.mi_menu, menu);
+        return true;
+    }
+
+    @Override public  boolean onOptionsItemSelected(@NonNull MenuItem item)  {
+        boolean blnReturn  = true; String
+                strTitle; strTitle  =  item.getTitle().toString();
+        switch (item.getItemId()){
+            case R.id.action_insertar:
+                IrAlFragmentInsertarMarca(ReadPreferences("usuarioToken", "string").toString());
+                break;
+            case R.id.action_log_out:
+                clearPreferences();
+                IrAlFragmentLogin();
+                break; default: blnReturn  = false; break; }
+        return blnReturn;
     }
 }

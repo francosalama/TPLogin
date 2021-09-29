@@ -68,7 +68,6 @@ public class InsertarMarca extends Fragment {
     View.OnClickListener btnAgregarMarca_Click = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            setParams("Nombre", edMarca.getText().toString());
             miTarea.execute();
         }
     };
@@ -95,7 +94,7 @@ public class InsertarMarca extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            // Estoy en el Main Thread.
+            setParams("Nombre", edMarca.getText().toString());
         }
 
         @Override

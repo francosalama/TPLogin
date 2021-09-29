@@ -85,6 +85,7 @@ public class ListadoMarcas extends Fragment {
                 miConexion.setRequestProperty("Accept", "application/json");
                 miConexion.setRequestProperty("tokenkey", token);
                 miConexion.setRequestMethod("GET");
+                Log.d("locura", "value" + miConexion.getResponseCode());
                 if (miConexion.getResponseCode() == 200) {
                     // En un BufferedReader leo todo!
                     responseReader = new BufferedReader(new InputStreamReader(miConexion.getInputStream()));
