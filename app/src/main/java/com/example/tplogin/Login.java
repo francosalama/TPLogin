@@ -110,6 +110,10 @@ public class Login extends Fragment {
                 MainActivity actividadContenedora;
                 actividadContenedora = (MainActivity) getActivity();
                 assert actividadContenedora != null;
+                actividadContenedora.SavePreferences("usuarioNombre", user.Nombre);
+                actividadContenedora.SavePreferences("usuarioApellido", user.Apellido);
+                actividadContenedora.SavePreferences("usuarioToken", user.TokenKey);
+                actividadContenedora.SavePreferences("usuarioId", user.Id);
                 actividadContenedora.IrAlFragmentInsertarMarca(user.TokenKey);
             }
         }
