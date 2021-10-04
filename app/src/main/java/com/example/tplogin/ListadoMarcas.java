@@ -32,7 +32,7 @@ public class ListadoMarcas extends Fragment {
     ArrayList<Marca> listaMarcas;
     ArrayAdapter<Marca> marcasAdapter;
     ListView lvMarcas;
-    TareaAsincronicaListarMarcas miTarea = new TareaAsincronicaListarMarcas();
+
     String token = null;
     Type fooType = new TypeToken<ArrayList<Marca>>() {}.getType();
 
@@ -50,7 +50,7 @@ public class ListadoMarcas extends Fragment {
             ObtenerReferencias();
             SetearListeners();
         }
-
+        TareaAsincronicaListarMarcas miTarea = new TareaAsincronicaListarMarcas();
         miTarea.execute();
 
 

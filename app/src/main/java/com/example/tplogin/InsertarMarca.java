@@ -37,10 +37,6 @@ public class InsertarMarca extends Fragment {
     Button btnAgregarMarca;
     String token = null;
     String json;
-
-
-
-    TareaAsincronicaInsertarMarcas miTarea = new TareaAsincronicaInsertarMarcas();
     protected JSONObject jsonParam = new JSONObject();
 
     public InsertarMarca() {
@@ -68,6 +64,7 @@ public class InsertarMarca extends Fragment {
     View.OnClickListener btnAgregarMarca_Click = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            TareaAsincronicaInsertarMarcas miTarea = new TareaAsincronicaInsertarMarcas();
             miTarea.execute();
         }
     };

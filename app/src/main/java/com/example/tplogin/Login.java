@@ -29,8 +29,6 @@ public class Login extends Fragment {
     Button btnLogin;
 
     Usuario user = new Usuario();
-    TareaAsincronicaUsuarios miTarea = new TareaAsincronicaUsuarios();
-
 
     public Login() {
         // Required empty public constructor
@@ -132,6 +130,7 @@ public class Login extends Fragment {
     View.OnClickListener btnLogin_Click = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            TareaAsincronicaUsuarios miTarea = new TareaAsincronicaUsuarios();
             miTarea.execute();
         }
     };
