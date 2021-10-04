@@ -34,9 +34,6 @@ public class ActualizarMarca extends Fragment {
     String token = null;
     String Id = null;
 
-
-    TareaAsincronicaActualizarMarcas tareaActualizar = new TareaAsincronicaActualizarMarcas();
-    TareaAsincronicaEliminarMarcas tareaEliminar = new TareaAsincronicaEliminarMarcas();
     protected JSONObject jsonParam = new JSONObject();
     protected JSONObject jsonEliminar = new JSONObject();
 
@@ -66,6 +63,7 @@ public class ActualizarMarca extends Fragment {
         public void onClick(View v) {
             setParamsActualizar("Id",Id);
             setParamsActualizar("Nombre", edActualizarMarca.getText().toString());
+            TareaAsincronicaActualizarMarcas tareaActualizar = new TareaAsincronicaActualizarMarcas();
             tareaActualizar.execute();
         }
     };
@@ -73,8 +71,13 @@ public class ActualizarMarca extends Fragment {
     View.OnClickListener btnEliminar_Click = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            setParamsEliminar("Id", Id);
-            tareaEliminar.execute();
+            try {
+                setParamsEliminar("Id", Id);
+                TareaAsincronicaEliminarMarcas tareaEliminar = new TareaAsincronicaEliminarMarcas();
+                tareaEliminar.execute();
+            } catch (Exception e) {
+                Toast.makeText(getActivity(), "No hay una marca con ese nombre", Toast.LENGTH_LONG).show();
+            }
         }
     };
 
